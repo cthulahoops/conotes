@@ -11,6 +11,13 @@ function App() {
 
   return (
     <>
+      <div>
+        {messages?.map((message, index) => (
+          <div key={index}>
+            <strong>{message.user}:</strong> {message.body}
+          </div>
+        ))}
+      </div>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -28,13 +35,6 @@ function App() {
         />
         <button>Send</button>
       </form>
-      <div>
-        {messages?.map((message, index) => (
-          <div key={index}>
-            <strong>{message.user}:</strong> {message.body}
-          </div>
-        ))}
-      </div>
     </>
   );
 }
