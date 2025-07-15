@@ -1,6 +1,6 @@
 :root {
-  --bg: #dddddd;
-  --surface: #eee;
+  --bg: #eee;
+  --surface: #fff;
   --border: #404040;
   --text: black;
   --accent: #3b82f6;
@@ -24,8 +24,12 @@ body {
   margin: auto;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  gap: 1rem;
   height: 100%;
   width: min(100%, 100ch);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  padding-inline: 1rem;
 }
 
 form {
@@ -63,7 +67,10 @@ strong {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+}
+
+.messages-container > *:first-child {
+  margin-top: auto;
 }
 
 /* Markdown styling */
@@ -160,6 +167,7 @@ strong {
 
 .stream-filter button:hover {
   background: var(--border);
+  color: white;
 }
 
 .stream-filter button.active {
