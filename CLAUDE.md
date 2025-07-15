@@ -75,3 +75,11 @@ Requires `VITE_CONVEX_URL` environment variable for Convex backend connection.
 ## Testing
 
 No test framework is currently configured in this project.
+
+## Code Organization Principles
+
+- Place helper functions below exported functions.
+
+## Coding Guidelines
+
+- Use function syntax not const ... = () =>
