@@ -9,12 +9,12 @@ export const sendMessage = mutation({
   },
   handler: async (ctx, args) => {
     const streams = extractStreams(args.body);
-    
+
     // Add selectedStream to the streams array if provided and not already included
     if (args.selectedStream && !streams.includes(args.selectedStream)) {
       streams.push(args.selectedStream);
     }
-    
+
     await ctx.db.insert("messages", {
       user: "adam",
       body: args.body,
@@ -56,5 +56,26 @@ export const getAllStreams = query({
     }
 
     return Array.from(allStreams).sort();
+  },
+});
+
+export const addStreamToMessage = mutation({
+  args: {
+    messageId: v.id("messages"),
+    streamName: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const message = await ctx.db.get(args.messageId);
+    if (!message) {
+      throw new Error("Message not found");
+    }
+
+    const currentStreams = message.streams || [];
+
+    // Add the stream if it's not already there
+    if (!currentStreams.includes(args.streamName)) {
+      const updatedStreams = [...currentStreams, args.streamName];
+      await ctx.db.patch(args.messageId, { streams: updatedStreams });
+    }
   },
 });

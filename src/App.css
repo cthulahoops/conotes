@@ -167,3 +167,24 @@ strong {
   color: white;
   border-color: var(--accent);
 }
+
+.stream-filter button[draggable="true"] {
+  cursor: grab;
+}
+
+.stream-filter button[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.message {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.message.drag-over {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.1);
+}

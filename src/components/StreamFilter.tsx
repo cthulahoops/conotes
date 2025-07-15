@@ -5,6 +5,11 @@ interface StreamFilterProps {
 }
 
 export function StreamFilter({ selectedStream, allStreams, onStreamSelect }: StreamFilterProps) {
+  const handleDragStart = (e: React.DragEvent<HTMLButtonElement>, stream: string) => {
+    e.dataTransfer.setData("text/plain", stream);
+    e.dataTransfer.effectAllowed = "copy";
+  };
+
   return (
     <div className="stream-filter">
       <button 
@@ -18,6 +23,8 @@ export function StreamFilter({ selectedStream, allStreams, onStreamSelect }: Str
           key={stream}
           className={selectedStream === stream ? "active" : ""}
           onClick={() => onStreamSelect(stream)}
+          draggable
+          onDragStart={(e) => handleDragStart(e, stream)}
         >
           #{stream}
         </button>

@@ -1,7 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
 interface Message {
+  _id: Id<"messages">;
   user: string;
   body: string;
   timestamp: number;
@@ -14,16 +18,56 @@ interface MessagesProps {
 
 export function Messages({ messages }: MessagesProps) {
   const { messagesEndRef } = useScrollToBottom([messages]);
+  const [dragOverMessage, setDragOverMessage] = useState<Id<"messages"> | null>(null);
+  const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>, messageId: Id<"messages">) => {
+    e.preventDefault();
+    setDragOverMessage(messageId);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    // Only clear the drag state if we're leaving the message container entirely
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setDragOverMessage(null);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>, messageId: Id<"messages">) => {
+    e.preventDefault();
+    setDragOverMessage(null);
+    
+    const streamName = e.dataTransfer.getData("text/plain");
+    if (streamName) {
+      await addStreamToMessage({
+        messageId,
+        streamName,
+      });
+    }
+  };
+
   return (
     <div className="messages-container">
-      {messages?.map((message, index) => (
-        <div key={index}>
+      {messages?.map((message) => (
+        <div 
+          key={message._id}
+          className={`message ${dragOverMessage === message._id ? 'drag-over' : ''}`}
+          onDragOver={handleDragOver}
+          onDragEnter={(e) => handleDragEnter(e, message._id)}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, message._id)}
+        >
           <strong>{message.user}:</strong>
           <div className="markdown-content">
             <ReactMarkdown
