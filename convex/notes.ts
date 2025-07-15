@@ -9,6 +9,7 @@ export const sendMessage = mutation({
     await ctx.db.insert("messages", {
       user: "adam",
       body: args.body,
+      timestamp: Date.now(),
     });
   },
 });
@@ -16,6 +17,6 @@ export const sendMessage = mutation({
 export const getMessages = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("messages").collect();
+    return await ctx.db.query("messages").order("asc").collect();
   },
 });
