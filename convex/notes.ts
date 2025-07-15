@@ -18,8 +18,36 @@ export const sendMessage = mutation({
 });
 
 export const getMessages = query({
+  args: {
+    stream: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const messages = await ctx.db.query("messages").order("asc").collect();
+
+    if (args.stream) {
+      return messages.filter(
+        (message) => message.streams && message.streams.includes(args.stream!),
+      );
+    }
+
+    return messages;
+  },
+});
+
+export const getAllStreams = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("messages").order("asc").collect();
+    const messages = await ctx.db.query("messages").collect();
+    const allStreams = new Set<string>();
+
+    for (const message of messages) {
+      if (message.streams) {
+        for (const stream of message.streams) {
+          allStreams.add(stream);
+        }
+      }
+    }
+
+    return Array.from(allStreams).sort();
   },
 });

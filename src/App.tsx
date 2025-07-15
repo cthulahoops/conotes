@@ -7,7 +7,9 @@ import { api } from "../convex/_generated/api";
 
 function App() {
   const sendMessage = useMutation(api.notes.sendMessage);
-  const messages = useQuery(api.notes.getMessages);
+  const [selectedStream, setSelectedStream] = useState<string | undefined>(undefined);
+  const messages = useQuery(api.notes.getMessages, { stream: selectedStream });
+  const allStreams = useQuery(api.notes.getAllStreams);
   const [messageText, setMessageText] = useState("");
   const { messagesEndRef } = useScrollToBottom([messages]);
 
@@ -18,6 +20,23 @@ function App() {
 
   return (
     <>
+      <div className="stream-filter">
+        <button 
+          className={selectedStream === undefined ? "active" : ""}
+          onClick={() => setSelectedStream(undefined)}
+        >
+          All
+        </button>
+        {allStreams?.map((stream) => (
+          <button
+            key={stream}
+            className={selectedStream === stream ? "active" : ""}
+            onClick={() => setSelectedStream(stream)}
+          >
+            #{stream}
+          </button>
+        ))}
+      </div>
       <div>
         {messages?.map((message, index) => (
           <div key={index}>
@@ -35,8 +54,17 @@ function App() {
                 {message.body}
               </ReactMarkdown>
             </div>
-            <div className="timestamp">
-              {formatTimestamp(message.timestamp)}
+            <div className="message-meta">
+              <div className="stream-tags">
+                {message.streams?.map((stream) => (
+                  <span key={stream} className="stream-tag">
+                    #{stream}
+                  </span>
+                ))}
+              </div>
+              <div className="timestamp">
+                {formatTimestamp(message.timestamp)}
+              </div>
             </div>
           </div>
         ))}

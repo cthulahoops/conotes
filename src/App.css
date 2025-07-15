@@ -113,9 +113,59 @@ strong {
   margin: 0.2rem 0;
 }
 
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 1rem;
+}
+
+.stream-tags {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.stream-tag {
+  background: var(--accent);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
 .timestamp {
   font-size: 0.75rem;
   color: #888;
-  margin-top: 0.25rem;
-  text-align: right;
+  white-space: nowrap;
+}
+
+.stream-filter {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.stream-filter button {
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.stream-filter button:hover {
+  background: var(--border);
+}
+
+.stream-filter button.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
 }
