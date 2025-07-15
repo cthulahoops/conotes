@@ -10,7 +10,8 @@
     "dev:frontend": "vite --open",
     "predev": "convex dev --once",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "convex": "^1.25.2",
@@ -30,6 +31,7 @@
     "npm-run-all2": "^7.0.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "vitest": "^3.2.4"
   }
 }
