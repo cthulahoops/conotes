@@ -22,7 +22,17 @@ function App() {
           <div key={index}>
             <strong>{message.user}:</strong> 
             <div className="markdown-content">
-              <ReactMarkdown>{message.body}</ReactMarkdown>
+              <ReactMarkdown
+                components={{
+                  a: ({ href, children, ...props }) => (
+                    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {message.body}
+              </ReactMarkdown>
             </div>
             <div className="timestamp">
               {formatTimestamp(message.timestamp)}
