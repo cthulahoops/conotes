@@ -27,11 +27,20 @@ function App() {
           setMessageText("");
         }}
       >
-        <input 
-          type="text" 
-          placeholder="Type a message" 
+        <textarea 
+          placeholder="Type a message (Ctrl+Enter to send)" 
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+              e.preventDefault();
+              const form = e.currentTarget.form;
+              if (form) {
+                form.requestSubmit();
+              }
+            }
+          }}
+          rows={3}
         />
         <button>Send</button>
       </form>
