@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import ReactMarkdown from "react-markdown";
 
@@ -9,6 +9,7 @@ function App() {
   const sendMessage = useMutation(api.notes.sendMessage);
   const messages = useQuery(api.notes.getMessages);
   const [messageText, setMessageText] = useState("");
+  const { messagesEndRef } = useScrollToBottom([messages]);
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -39,6 +40,7 @@ function App() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <form
         onSubmit={async (e) => {
@@ -71,3 +73,17 @@ function App() {
 }
 
 export default App;
+
+function useScrollToBottom(deps: unknown[]) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, deps);
+
+  return { messagesEndRef };
+}
