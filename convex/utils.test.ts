@@ -66,4 +66,10 @@ Another line with #work again`;
     const result = extractStreams(message);
     expect(result).toEqual(['work', 'urgent']);
   });
+
+  it('extracts hashtags at the start of a line', () => {
+    const message = '#conotes\nRegular text with #general';
+    const result = extractStreams(message);
+    expect(result).toEqual(['conotes', 'general']);
+  });
 });
