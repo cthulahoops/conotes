@@ -4,10 +4,13 @@ import ReactMarkdown from "react-markdown";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { StreamFilter } from "./components/StreamFilter";
 
 function App() {
   const sendMessage = useMutation(api.notes.sendMessage);
-  const [selectedStream, setSelectedStream] = useState<string | undefined>(undefined);
+  const [selectedStream, setSelectedStream] = useState<string | undefined>(
+    undefined,
+  );
   const messages = useQuery(api.notes.getMessages, { stream: selectedStream });
   const allStreams = useQuery(api.notes.getAllStreams);
   const [messageText, setMessageText] = useState("");
@@ -15,37 +18,30 @@ function App() {
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
     <>
-      <div className="stream-filter">
-        <button 
-          className={selectedStream === undefined ? "active" : ""}
-          onClick={() => setSelectedStream(undefined)}
-        >
-          All
-        </button>
-        {allStreams?.map((stream) => (
-          <button
-            key={stream}
-            className={selectedStream === stream ? "active" : ""}
-            onClick={() => setSelectedStream(stream)}
-          >
-            #{stream}
-          </button>
-        ))}
-      </div>
-      <div>
+      <StreamFilter
+        selectedStream={selectedStream}
+        allStreams={allStreams}
+        onStreamSelect={setSelectedStream}
+      />
+      <div className="messages-container">
         {messages?.map((message, index) => (
           <div key={index}>
-            <strong>{message.user}:</strong> 
+            <strong>{message.user}:</strong>
             <div className="markdown-content">
               <ReactMarkdown
                 components={{
                   a: ({ href, children, ...props }) => (
-                    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      {...props}
+                    >
                       {children}
                     </a>
                   ),
@@ -79,12 +75,12 @@ function App() {
           setMessageText("");
         }}
       >
-        <textarea 
-          placeholder="Type a message (Ctrl+Enter to send)" 
+        <textarea
+          placeholder="Type a message (Ctrl+Enter to send)"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && e.ctrlKey) {
+            if (e.key === "Enter" && e.ctrlKey) {
               e.preventDefault();
               const form = e.currentTarget.form;
               if (form) {
