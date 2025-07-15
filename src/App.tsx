@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import ReactMarkdown from "react-markdown";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -9,12 +10,23 @@ function App() {
   const messages = useQuery(api.notes.getMessages);
   const [messageText, setMessageText] = useState("");
 
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
     <>
       <div>
         {messages?.map((message, index) => (
           <div key={index}>
-            <strong>{message.user}:</strong> {message.body}
+            <strong>{message.user}:</strong> 
+            <div className="markdown-content">
+              <ReactMarkdown>{message.body}</ReactMarkdown>
+            </div>
+            <div className="timestamp">
+              {formatTimestamp(message.timestamp)}
+            </div>
           </div>
         ))}
       </div>
