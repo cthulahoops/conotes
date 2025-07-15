@@ -71,6 +71,7 @@ function App() {
           e.preventDefault();
           await sendMessage({
             body: messageText,
+            selectedStream: selectedStream,
           });
           setMessageText("");
         }}

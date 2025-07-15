@@ -5,9 +5,16 @@ import { extractStreams } from "./utils";
 export const sendMessage = mutation({
   args: {
     body: v.string(),
+    selectedStream: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const streams = extractStreams(args.body);
+    
+    // Add selectedStream to the streams array if provided and not already included
+    if (args.selectedStream && !streams.includes(args.selectedStream)) {
+      streams.push(args.selectedStream);
+    }
+    
     await ctx.db.insert("messages", {
       user: "adam",
       body: args.body,
