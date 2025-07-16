@@ -7,11 +7,11 @@ import { ImageAttachment } from "./ImageAttachment";
 
 interface Message {
   _id: Id<"messages">;
-  user: string;
+  _creationTime: number;
+  userId?: Id<"users">;
   body: string;
-  timestamp: number;
-  streams?: string[];
-  attachments?: Id<"_storage">[];
+  streams: string[];
+  attachments: Id<"_storage">[];
 }
 
 interface MessagesProps {
@@ -78,7 +78,7 @@ export function Messages({ messages }: MessagesProps) {
           onDragLeave={handleDragLeave}
           onDrop={(e) => handleDrop(e, message._id)}
         >
-          <strong>{message.user}:</strong>
+          <strong>User:</strong>
           <div className="markdown-content">
             <ReactMarkdown
               components={{
@@ -97,7 +97,7 @@ export function Messages({ messages }: MessagesProps) {
               {message.body}
             </ReactMarkdown>
           </div>
-          {message.attachments && message.attachments.length > 0 && (
+          {message.attachments.length > 0 && (
             <div className="message-attachments">
               {message.attachments.map((storageId) => (
                 <ImageAttachment key={storageId} storageId={storageId} />
@@ -106,14 +106,14 @@ export function Messages({ messages }: MessagesProps) {
           )}
           <div className="message-meta">
             <div className="stream-tags">
-              {message.streams?.map((stream) => (
+              {message.streams.map((stream) => (
                 <span key={stream} className="stream-tag">
                   #{stream}
                 </span>
               ))}
             </div>
             <div className="timestamp">
-              {formatTimestamp(message.timestamp)}
+              {formatTimestamp(message._creationTime)}
             </div>
           </div>
         </div>

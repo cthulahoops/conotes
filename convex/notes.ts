@@ -1,6 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { extractStreams } from "./utils";
+import { auth } from "./auth";
 
 export const sendMessage = mutation({
   args: {
@@ -16,8 +17,13 @@ export const sendMessage = mutation({
       streams.push(args.selectedStream);
     }
 
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("User must be authenticated to send messages");
+    }
+
     await ctx.db.insert("messages", {
-      user: "adam",
+      userId: userId,
       body: args.body,
       streams: streams,
       attachments: args.attachments,

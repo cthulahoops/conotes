@@ -5,7 +5,7 @@ import { v } from "convex/values";
 const schema = defineSchema({
   ...authTables,
   messages: defineTable({
-    user: v.string(),
+    userId: v.optional(v.id("users")),
     body: v.string(),
     streams: v.array(v.string()),
     attachments: v.array(v.id("_storage")),
