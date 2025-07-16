@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -8,8 +8,16 @@ interface ImageAttachmentProps {
 }
 
 export function ImageAttachment({ storageId }: ImageAttachmentProps) {
-  const [isEnlarged, setIsEnlarged] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const imageUrl = useQuery(api.notes.getImageUrl, { storageId });
+
+  const openModal = () => {
+    dialogRef.current?.showModal();
+  };
+
+  const closeModal = () => {
+    dialogRef.current?.close();
+  };
 
   if (!imageUrl) {
     return (
@@ -29,28 +37,18 @@ export function ImageAttachment({ storageId }: ImageAttachmentProps) {
           alt="Uploaded image"
           className="attached-image"
           loading="lazy"
-          onClick={() => setIsEnlarged(true)}
+          onClick={openModal}
           style={{ cursor: "pointer" }}
         />
       </div>
-      {isEnlarged && (
-        <div className="image-modal" onClick={() => setIsEnlarged(false)}>
-          <div className="image-modal-content">
-            <img
-              src={imageUrl}
-              alt="Uploaded image"
-              className="enlarged-image"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <button
-              className="close-modal"
-              onClick={() => setIsEnlarged(false)}
-            >
-              ×
-            </button>
-          </div>
+      <dialog ref={dialogRef} className="image-modal" onClick={closeModal}>
+        <div
+          className="image-modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <img src={imageUrl} alt="Uploaded image" className="enlarged-image" />
         </div>
-      )}
+      </dialog>
     </>
   );
 }
