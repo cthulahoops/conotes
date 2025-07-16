@@ -87,3 +87,7 @@ No test framework is currently configured in this project.
 ## Development Precautions
 
 - Never run the development server yourself.
+
+## Development Best Practices
+
+- Always "npm run check" your work.
