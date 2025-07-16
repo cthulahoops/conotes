@@ -10,8 +10,51 @@ interface MessageInputProps {
 
 export function MessageInput({ selectedStream }: MessageInputProps) {
   const sendMessage = useMutation(api.notes.sendMessage);
+  const generateUploadUrl = useMutation(api.notes.generateUploadUrl);
   const [messageText, setMessageText] = useState("");
   const [attachments, setAttachments] = useState<Id<"_storage">[]>([]);
+  const [uploading, setUploading] = useState(false);
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData.items;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (item.type.indexOf("image") !== -1) {
+        e.preventDefault();
+
+        const file = item.getAsFile();
+        if (!file) continue;
+
+        setUploading(true);
+
+        try {
+          const uploadUrl = await generateUploadUrl();
+
+          const result = await fetch(uploadUrl, {
+            method: "POST",
+            headers: { "Content-Type": file.type },
+            body: file,
+          });
+
+          if (!result.ok) {
+            throw new Error("Upload failed");
+          }
+
+          const { storageId } = await result.json();
+          setAttachments([...attachments, storageId]);
+        } catch (error) {
+          console.error("Upload error:", error);
+          alert("Upload failed. Please try again.");
+        } finally {
+          setUploading(false);
+        }
+
+        break;
+      }
+    }
+  };
 
   return (
     <form
@@ -28,9 +71,10 @@ export function MessageInput({ selectedStream }: MessageInputProps) {
       className="message-input-form"
     >
       <textarea
-        placeholder="Type a message (Ctrl+Enter to send)"
+        placeholder="Type a message (Ctrl+Enter to send, paste images directly)"
         value={messageText}
         onChange={(e) => setMessageText(e.target.value)}
+        onPaste={handlePaste}
         onKeyDown={(e) => {
           if (e.key === "Enter" && e.ctrlKey) {
             e.preventDefault();
@@ -43,7 +87,9 @@ export function MessageInput({ selectedStream }: MessageInputProps) {
         rows={3}
       />
       <div className="message-input-actions">
-        <button>Send</button>
+        <button disabled={uploading}>
+          {uploading ? "Uploading..." : "Send"}
+        </button>
         {attachments.length > 0 && (
           <div className="pending-attachments">
             <span>📎 {attachments.length} image(s) attached</span>
