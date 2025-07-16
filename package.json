@@ -10,7 +10,7 @@
     "dev:frontend": "vite --open",
     "predev": "convex dev --once",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit && tsc --noEmit --project convex/tsconfig.json",
+    "typecheck": "tsc --noEmit --project tsconfig.app.json && tsc --noEmit --project convex/tsconfig.json",
     "preview": "vite preview",
     "test": "vitest"
   },
