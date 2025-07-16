@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
+import preferTopLevelFunctionDeclarations from './eslint-rules/prefer-top-level-function-declarations.js'
 
 export default tseslint.config([
   globalIgnores(['dist', 'convex/_generated']),
@@ -18,6 +19,17 @@ export default tseslint.config([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+    plugins: {
+      local: {
+        rules: {
+          "prefer-top-level-function-declarations": preferTopLevelFunctionDeclarations,
+        },
+      },
+    },
+    rules: {
+      "prefer-arrow-callback": "off",
+      "local/prefer-top-level-function-declarations": "error",
     },
   },
 ])
