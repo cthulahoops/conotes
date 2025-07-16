@@ -7,8 +7,8 @@ const schema = defineSchema({
   messages: defineTable({
     user: v.string(),
     body: v.string(),
-    streams: v.optional(v.array(v.string())),
-    attachments: v.optional(v.array(v.id("_storage"))),
+    streams: v.array(v.string()),
+    attachments: v.array(v.id("_storage")),
   }),
 });
 

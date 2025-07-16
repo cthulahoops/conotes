@@ -6,7 +6,7 @@ export const sendMessage = mutation({
   args: {
     body: v.string(),
     selectedStream: v.optional(v.string()),
-    attachments: v.optional(v.array(v.id("_storage"))),
+    attachments: v.array(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const streams = extractStreams(args.body);

@@ -49,7 +49,7 @@ function Content() {
           await sendMessage({
             body: messageText,
             selectedStream: selectedStream,
-            attachments: attachments.length > 0 ? attachments : undefined,
+            attachments: attachments,
           });
           setMessageText("");
           setAttachments([]);
