@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -19,8 +19,22 @@ interface MessagesProps {
 }
 
 export function Messages({ messages, currentStreamName }: MessagesProps) {
-  const { messagesEndRef } = useScrollToBottom([messages]);
   const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollToBottom = useCallback(() => {
+    if (!scrollRef.current) {
+      return;
+    }
+    scrollRef.current.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [scrollRef]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentStreamName, messages, scrollToBottom]);
 
   const handleDrop = async (
     e: React.DragEvent<HTMLDivElement>,
@@ -38,7 +52,7 @@ export function Messages({ messages, currentStreamName }: MessagesProps) {
   };
 
   return (
-    <div className="messages-container">
+    <div className="messages-container" ref={scrollRef}>
       {messages?.map((message) => (
         <Message
           key={message._id}
@@ -47,18 +61,6 @@ export function Messages({ messages, currentStreamName }: MessagesProps) {
           onDrop={handleDrop}
         />
       ))}
-      <div ref={messagesEndRef} />
     </div>
   );
-}
-
-function useScrollToBottom(deps: unknown[]) {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-
-  return { messagesEndRef };
 }
