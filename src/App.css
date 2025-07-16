@@ -188,7 +188,6 @@ strong {
   border: 2px solid transparent;
   border-radius: 8px;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
   transition: all 0.2s ease;
 }
 
@@ -268,25 +267,25 @@ strong {
 }
 
 .message-attachments {
-  margin-top: 0.5rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .image-attachment {
+  --image-height: 200px;
+  --image-width: 300px;
   position: relative;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: clip;
   background: var(--bg);
 }
 
 .image-attachment.loading {
-  width: 200px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: var(--image-width);
+  height: var(--image-height);
+  display: grid;
+  place-content: center;
 }
 
 .image-placeholder {
@@ -298,10 +297,10 @@ strong {
 }
 
 .attached-image {
-  max-width: 300px;
-  max-height: 200px;
+  display: block;
+  max-width: var(--image-width);
+  max-height: var(--image-height);
   width: auto;
   height: auto;
-  border-radius: 8px;
   border: 1px solid var(--border);
 }
