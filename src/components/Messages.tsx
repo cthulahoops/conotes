@@ -78,7 +78,6 @@ export function Messages({ messages }: MessagesProps) {
           onDragLeave={handleDragLeave}
           onDrop={(e) => handleDrop(e, message._id)}
         >
-          <strong>User:</strong>
           <div className="markdown-content">
             <ReactMarkdown
               components={{

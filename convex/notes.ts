@@ -36,7 +36,16 @@ export const getMessages = query({
     stream: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const messages = await ctx.db.query("messages").order("asc").collect();
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      return [];
+    }
+
+    const messages = await ctx.db
+      .query("messages")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .order("asc")
+      .collect();
 
     if (args.stream) {
       return messages.filter(
@@ -51,7 +60,16 @@ export const getMessages = query({
 export const getAllStreams = query({
   args: {},
   handler: async (ctx) => {
-    const messages = await ctx.db.query("messages").collect();
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      return [];
+    }
+
+    const messages = await ctx.db
+      .query("messages")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .collect();
+    
     const allStreams = new Set<string>();
 
     for (const message of messages) {
@@ -72,9 +90,19 @@ export const addStreamToMessage = mutation({
     streamName: v.string(),
   },
   handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("User must be authenticated");
+    }
+
     const message = await ctx.db.get(args.messageId);
     if (!message) {
       throw new Error("Message not found");
+    }
+
+    // Check if the message belongs to the authenticated user
+    if (message.userId !== userId) {
+      throw new Error("You can only modify your own messages");
     }
 
     const currentStreams = message.streams || [];
