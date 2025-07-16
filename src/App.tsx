@@ -8,7 +8,7 @@ import type { Id } from "../convex/_generated/dataModel";
 import { Messages } from "./components/Messages";
 import { ImageUploader } from "./components/ImageUploader";
 
-function App() {
+export default function App() {
   const sendMessage = useMutation(api.notes.sendMessage);
   const [selectedStream, setSelectedStream] = useState<string | undefined>(
     undefined,
@@ -77,6 +77,3 @@ function App() {
     </>
   );
 }
-
-export default App;
-
