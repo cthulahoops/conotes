@@ -6,6 +6,7 @@ export const sendMessage = mutation({
   args: {
     body: v.string(),
     selectedStream: v.optional(v.string()),
+    attachments: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const streams = extractStreams(args.body);
@@ -20,6 +21,7 @@ export const sendMessage = mutation({
       body: args.body,
       timestamp: Date.now(),
       streams: streams,
+      attachments: args.attachments,
     });
   },
 });
@@ -77,5 +79,21 @@ export const addStreamToMessage = mutation({
       const updatedStreams = [...currentStreams, args.streamName];
       await ctx.db.patch(args.messageId, { streams: updatedStreams });
     }
+  },
+});
+
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
+export const getImageUrl = query({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.storage.getUrl(args.storageId);
   },
 });
