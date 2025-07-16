@@ -75,9 +75,9 @@ strong {
 
 /* Markdown styling */
 .markdown-content {
+  grid-area: content;
   display: inline-block;
-  margin-left: 0.5rem;
-}
+  }
 
 .markdown-content h1, .markdown-content h2, .markdown-content h3 {
   margin: 0.5rem 0;
@@ -124,6 +124,7 @@ strong {
   align-items: center;
   margin-top: 0.5rem;
   gap: 1rem;
+  grid-area: meta;
 }
 
 .stream-tags {
@@ -141,7 +142,7 @@ strong {
   font-weight: 500;
 }
 
-.timestamp {
+.message-timestamp {
   font-size: 0.75rem;
   color: #888;
   white-space: nowrap;
@@ -189,6 +190,16 @@ strong {
   border-radius: 8px;
   padding: 0.5rem;
   transition: all 0.2s ease;
+  display: grid;
+  grid-template-areas: 
+    "content timestamp"
+    "attachments attachments"
+    "meta meta";
+  grid-template-columns: 1fr auto;
+}
+
+.message-timestamp {
+  grid-area: timestamp;
 }
 
 .message.drag-over {
@@ -267,6 +278,7 @@ strong {
 }
 
 .message-attachments {
+  grid-area: attachments;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
