@@ -83,3 +83,7 @@ No test framework is currently configured in this project.
 ## Coding Guidelines
 
 - Use function syntax not const ... = () =>
+
+## Development Precautions
+
+- Never run the development server yourself.
