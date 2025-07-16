@@ -2,6 +2,8 @@ import ReactMarkdown from "react-markdown";
 import type { Id } from "../../convex/_generated/dataModel";
 import { ImageAttachment } from "./ImageAttachment";
 
+import "./markdown.css";
+
 interface MessageType {
   _id: Id<"messages">;
   _creationTime: number;
