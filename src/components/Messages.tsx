@@ -126,12 +126,9 @@ export function Messages({ messages }: MessagesProps) {
 function useScrollToBottom(deps: unknown[]) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return { messagesEndRef };
