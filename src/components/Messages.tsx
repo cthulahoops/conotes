@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
-import { ImageAttachment } from "./ImageAttachment";
+import { Message } from "./Message";
 
-interface Message {
+interface MessageType {
   _id: Id<"messages">;
   _creationTime: number;
   userId?: Id<"users">;
@@ -15,7 +14,7 @@ interface Message {
 }
 
 interface MessagesProps {
-  messages: Message[] | undefined;
+  messages: MessageType[] | undefined;
 }
 
 export function Messages({ messages }: MessagesProps) {
@@ -25,10 +24,6 @@ export function Messages({ messages }: MessagesProps) {
   );
   const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
 
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -70,52 +65,15 @@ export function Messages({ messages }: MessagesProps) {
   return (
     <div className="messages-container">
       {messages?.map((message) => (
-        <div
+        <Message
           key={message._id}
-          className={`message ${dragOverMessage === message._id ? "drag-over" : ""}`}
+          message={message}
+          isDraggedOver={dragOverMessage === message._id}
           onDragOver={handleDragOver}
-          onDragEnter={(e) => handleDragEnter(e, message._id)}
+          onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
-          onDrop={(e) => handleDrop(e, message._id)}
-        >
-          <div className="markdown-content">
-            <ReactMarkdown
-              components={{
-                a: ({ href, children, ...props }) => (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    {...props}
-                  >
-                    {children}
-                  </a>
-                ),
-              }}
-            >
-              {message.body}
-            </ReactMarkdown>
-          </div>
-          {message.attachments.length > 0 && (
-            <div className="message-attachments">
-              {message.attachments.map((storageId) => (
-                <ImageAttachment key={storageId} storageId={storageId} />
-              ))}
-            </div>
-          )}
-          <div className="message-meta">
-            <div className="stream-tags">
-              {message.streams.map((stream) => (
-                <span key={stream} className="stream-tag">
-                  #{stream}
-                </span>
-              ))}
-            </div>
-            <div className="timestamp">
-              {formatTimestamp(message._creationTime)}
-            </div>
-          </div>
-        </div>
+          onDrop={handleDrop}
+        />
       ))}
       <div ref={messagesEndRef} />
     </div>
