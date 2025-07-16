@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -8,7 +9,23 @@ import type { Id } from "../convex/_generated/dataModel";
 import { Messages } from "./components/Messages";
 import { ImageUploader } from "./components/ImageUploader";
 
+import { SignIn } from "./SignIn";
+
 export default function App() {
+  return (
+    <>
+      <AuthLoading>Loading</AuthLoading>
+      <Unauthenticated>
+        <SignIn />
+      </Unauthenticated>
+      <Authenticated>
+        <Content />
+      </Authenticated>
+    </>
+  );
+}
+
+function Content() {
   const sendMessage = useMutation(api.notes.sendMessage);
   const [selectedStream, setSelectedStream] = useState<string | undefined>(
     undefined,

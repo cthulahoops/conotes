@@ -19,7 +19,6 @@ export const sendMessage = mutation({
     await ctx.db.insert("messages", {
       user: "adam",
       body: args.body,
-      timestamp: Date.now(),
       streams: streams,
       attachments: args.attachments,
     });
