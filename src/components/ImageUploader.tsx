@@ -75,33 +75,31 @@ export function ImageUploader({ onUpload }: ImageUploaderProps) {
   };
 
   return (
-    <div className="image-uploader">
-      <div
-        className={`upload-area ${dragOver ? "drag-over" : ""}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          style={{ display: "none" }}
-        />
+    <div
+      className={`upload-area ${dragOver ? "drag-over" : ""}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onClick={handleClick}
+    >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        style={{ display: "none" }}
+      />
 
-        {uploading ? (
-          <div className="upload-progress">
-            <div className="spinner"></div>
-            <span>Uploading...</span>
-          </div>
-        ) : (
-          <div className="upload-prompt">
-            <span>📷 Click or drag to upload image</span>
-          </div>
-        )}
-      </div>
+      {uploading ? (
+        <div className="upload-progress">
+          <div className="spinner"></div>
+          <span>Uploading...</span>
+        </div>
+      ) : (
+        <div className="upload-prompt">
+          <span>📷 Click or drag to upload image</span>
+        </div>
+      )}
     </div>
   );
 }

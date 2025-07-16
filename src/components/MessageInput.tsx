@@ -25,28 +25,25 @@ export function MessageInput({ selectedStream }: MessageInputProps) {
         setMessageText("");
         setAttachments([]);
       }}
+      className="message-input-form"
     >
-      <div className="message-input-container">
-        <textarea
-          placeholder="Type a message (Ctrl+Enter to send)"
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && e.ctrlKey) {
-              e.preventDefault();
-              const form = e.currentTarget.form;
-              if (form) {
-                form.requestSubmit();
-              }
+      <textarea
+        placeholder="Type a message (Ctrl+Enter to send)"
+        value={messageText}
+        onChange={(e) => setMessageText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.ctrlKey) {
+            e.preventDefault();
+            const form = e.currentTarget.form;
+            if (form) {
+              form.requestSubmit();
             }
-          }}
-          rows={3}
-        />
-        <ImageUploader
-          onUpload={(storageId) => {
-            setAttachments([...attachments, storageId]);
-          }}
-        />
+          }
+        }}
+        rows={3}
+      />
+      <div className="message-input-actions">
+        <button>Send</button>
         {attachments.length > 0 && (
           <div className="pending-attachments">
             <span>📎 {attachments.length} image(s) attached</span>
@@ -59,8 +56,12 @@ export function MessageInput({ selectedStream }: MessageInputProps) {
             </button>
           </div>
         )}
+        <ImageUploader
+          onUpload={(storageId) => {
+            setAttachments([...attachments, storageId]);
+          }}
+        />
       </div>
-      <button>Send</button>
     </form>
   );
 }

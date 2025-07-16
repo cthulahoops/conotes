@@ -162,19 +162,19 @@ strong {
   background: rgba(59, 130, 246, 0.1);
 }
 
-/* Image upload and attachment styles */
-.message-input-container {
-  flex: 1;
+.message-input-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.message-input-actions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.image-uploader {
-  position: relative;
-}
-
 .upload-area {
+  flex: 1;
   border: 2px dashed var(--border);
   border-radius: 8px;
   padding: 1rem;
@@ -244,11 +244,10 @@ strong {
   --image-width: 300px;
   position: relative;
   border-radius: 8px;
-  overflow: clip;
-  background: var(--bg);
 }
 
 .image-attachment.loading {
+  background: var(--bg);
   width: var(--image-width);
   height: var(--image-height);
   display: grid;
@@ -265,6 +264,7 @@ strong {
 
 .attached-image {
   display: block;
+  border-radius: 8px;
   max-width: var(--image-width);
   max-height: var(--image-height);
   width: auto;
