@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -20,39 +20,13 @@ interface MessagesProps {
 
 export function Messages({ messages, currentStreamName }: MessagesProps) {
   const { messagesEndRef } = useScrollToBottom([messages]);
-  const [dragOverMessage, setDragOverMessage] = useState<Id<"messages"> | null>(
-    null,
-  );
   const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
-
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
-  };
-
-  const handleDragEnter = (
-    e: React.DragEvent<HTMLDivElement>,
-    messageId: Id<"messages">,
-  ) => {
-    e.preventDefault();
-    setDragOverMessage(messageId);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    // Only clear the drag state if we're leaving the message container entirely
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setDragOverMessage(null);
-    }
-  };
 
   const handleDrop = async (
     e: React.DragEvent<HTMLDivElement>,
     messageId: Id<"messages">,
   ) => {
     e.preventDefault();
-    setDragOverMessage(null);
 
     const streamName = e.dataTransfer.getData("text/plain");
     if (streamName) {
@@ -70,10 +44,6 @@ export function Messages({ messages, currentStreamName }: MessagesProps) {
           key={message._id}
           message={message}
           currentStreamName={currentStreamName}
-          isDraggedOver={dragOverMessage === message._id}
-          onDragOver={handleDragOver}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         />
       ))}

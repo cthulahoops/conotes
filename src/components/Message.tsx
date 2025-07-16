@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Id } from "../../convex/_generated/dataModel";
 import { ImageAttachment } from "./ImageAttachment";
@@ -16,34 +17,52 @@ interface MessageType {
 interface MessageProps {
   message: MessageType;
   currentStreamName: string | undefined;
-  isDraggedOver: boolean;
-  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
-  onDragEnter: (e: React.DragEvent<HTMLDivElement>, messageId: Id<"messages">) => void;
-  onDragLeave: (e: React.DragEvent<HTMLDivElement>) => void;
-  onDrop: (e: React.DragEvent<HTMLDivElement>, messageId: Id<"messages">) => void;
+  onDrop: (
+    e: React.DragEvent<HTMLDivElement>,
+    messageId: Id<"messages">,
+  ) => void;
 }
 
 export function Message({
   message,
   currentStreamName,
-  isDraggedOver,
-  onDragOver,
-  onDragEnter,
-  onDragLeave,
   onDrop,
 }: MessageProps) {
+  const [isDraggedOver, setIsDraggedOver] = useState(false);
+
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggedOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    // Only clear the drag state if we're leaving the message container entirely
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDraggedOver(false);
+    }
+  };
+
   return (
     <div
       className={`message ${isDraggedOver ? "drag-over" : ""}`}
-      onDragOver={onDragOver}
-      onDragEnter={(e) => onDragEnter(e, message._id)}
-      onDragLeave={onDragLeave}
-      onDrop={(e) => onDrop(e, message._id)}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={(e) => {
+        setIsDraggedOver(false);
+        onDrop(e, message._id);
+      }}
     >
       <div className="markdown-content">
         <ReactMarkdown
@@ -87,3 +106,4 @@ export function Message({
     </div>
   );
 }
+
