@@ -42,7 +42,7 @@ function Content() {
         allStreams={allStreams}
         onStreamSelect={setSelectedStream}
       />
-      <Messages messages={messages} />
+      <Messages messages={messages} currentStreamName={selectedStream} />
       <form
         onSubmit={async (e) => {
           e.preventDefault();

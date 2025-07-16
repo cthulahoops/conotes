@@ -15,9 +15,10 @@ interface MessageType {
 
 interface MessagesProps {
   messages: MessageType[] | undefined;
+  currentStreamName: string | undefined;
 }
 
-export function Messages({ messages }: MessagesProps) {
+export function Messages({ messages, currentStreamName }: MessagesProps) {
   const { messagesEndRef } = useScrollToBottom([messages]);
   const [dragOverMessage, setDragOverMessage] = useState<Id<"messages"> | null>(
     null,
@@ -68,6 +69,7 @@ export function Messages({ messages }: MessagesProps) {
         <Message
           key={message._id}
           message={message}
+          currentStreamName={currentStreamName}
           isDraggedOver={dragOverMessage === message._id}
           onDragOver={handleDragOver}
           onDragEnter={handleDragEnter}

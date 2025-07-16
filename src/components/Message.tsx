@@ -13,6 +13,7 @@ interface MessageType {
 
 interface MessageProps {
   message: MessageType;
+  currentStreamName: string | undefined;
   isDraggedOver: boolean;
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter: (e: React.DragEvent<HTMLDivElement>, messageId: Id<"messages">) => void;
@@ -22,6 +23,7 @@ interface MessageProps {
 
 export function Message({
   message,
+  currentStreamName,
   isDraggedOver,
   onDragOver,
   onDragEnter,
@@ -68,11 +70,13 @@ export function Message({
       )}
       <div className="message-meta">
         <div className="stream-tags">
-          {message.streams.map((stream) => (
-            <span key={stream} className="stream-tag">
-              #{stream}
-            </span>
-          ))}
+          {message.streams
+            .filter((stream) => stream !== currentStreamName)
+            .map((stream) => (
+              <span key={stream} className="stream-tag">
+                #{stream}
+              </span>
+            ))}
         </div>
       </div>
       <div className="message-timestamp">
