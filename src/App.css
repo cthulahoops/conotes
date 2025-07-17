@@ -37,7 +37,8 @@ form {
   gap: 0.5rem;
 }
 
-input, textarea {
+input,
+textarea {
   flex: 1;
   padding: 0.75rem;
   background: var(--surface);
@@ -173,7 +174,7 @@ strong {
   padding: 0.5rem;
   transition: all 0.2s ease;
   display: grid;
-  grid-template-areas: 
+  grid-template-areas:
     "content timestamp"
     "attachments attachments"
     "meta meta";
@@ -212,7 +213,8 @@ strong {
   background: var(--surface);
 }
 
-.upload-area:hover, .upload-area.drag-over {
+.upload-area:hover,
+.upload-area.drag-over {
   border-color: var(--accent);
   background: rgba(59, 130, 246, 0.05);
 }
@@ -241,8 +243,12 @@ strong {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .pending-attachments {

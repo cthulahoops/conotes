@@ -2,9 +2,11 @@
 .markdown-content {
   grid-area: content;
   display: inline-block;
-  }
+}
 
-.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
   margin: 0.5rem 0;
   color: var(--text);
 }
@@ -17,7 +19,7 @@
   background: var(--bg);
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .markdown-content pre {
@@ -34,7 +36,8 @@
   color: var(--text);
 }
 
-.markdown-content ul, .markdown-content ol {
+.markdown-content ul,
+.markdown-content ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
@@ -42,4 +45,3 @@
 .markdown-content li {
   margin: 0.2rem 0;
 }
-

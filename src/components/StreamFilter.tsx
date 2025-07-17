@@ -4,15 +4,22 @@ interface StreamFilterProps {
   onStreamSelect: (stream: string | undefined) => void;
 }
 
-export function StreamFilter({ selectedStream, allStreams, onStreamSelect }: StreamFilterProps) {
-  const handleDragStart = (e: React.DragEvent<HTMLButtonElement>, stream: string) => {
+export function StreamFilter({
+  selectedStream,
+  allStreams,
+  onStreamSelect,
+}: StreamFilterProps) {
+  const handleDragStart = (
+    e: React.DragEvent<HTMLButtonElement>,
+    stream: string,
+  ) => {
     e.dataTransfer.setData("text/plain", stream);
     e.dataTransfer.effectAllowed = "copy";
   };
 
   return (
     <div className="stream-filter">
-      <button 
+      <button
         className={selectedStream === undefined ? "active" : ""}
         onClick={() => onStreamSelect(undefined)}
       >
