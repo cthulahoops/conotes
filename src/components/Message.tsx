@@ -36,19 +36,41 @@ export function Message({ message, currentStreamName, onDrop }: MessageProps) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const isValidStreamDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    if (e.dataTransfer.types.includes("Files")) {
+      return false;
+    }
+
+    if (e.dataTransfer.types.includes("text/plain")) {
+      const text = e.dataTransfer.getData("text/plain");
+      return text && /^[a-zA-Z0-9_-]+$/.test(text);
+    }
+
+    return false;
+  };
+
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
+
+    // Only show visual feedback for valid stream drops
+    if (isValidStreamDrop(e)) {
+      e.dataTransfer.dropEffect = "copy";
+    } else {
+      e.dataTransfer.dropEffect = "none";
+    }
   };
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDraggedOver(true);
+
+    if (isValidStreamDrop(e)) {
+      setIsDraggedOver(true);
+    }
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    // Only clear the drag state if we're leaving the message container entirely
+
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       setIsDraggedOver(false);
     }

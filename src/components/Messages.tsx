@@ -42,8 +42,14 @@ export function Messages({ messages, currentStreamName }: MessagesProps) {
   ) => {
     e.preventDefault();
 
+    // Only handle stream tag drops, not file drops
+    if (e.dataTransfer.files.length > 0) {
+      return; // Ignore file drops
+    }
+
     const streamName = e.dataTransfer.getData("text/plain");
-    if (streamName) {
+    // Validate using the same regex pattern as hashtag extraction
+    if (streamName && /^[a-zA-Z0-9_-]+$/.test(streamName)) {
       await addStreamToMessage({
         messageId,
         streamName,
