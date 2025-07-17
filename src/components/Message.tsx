@@ -19,17 +19,14 @@ interface MessageType {
 interface MessageProps {
   message: MessageType;
   currentStreamName: string | undefined;
-  onDrop: (
-    e: React.DragEvent<HTMLDivElement>,
-    messageId: Id<"messages">,
-  ) => void;
 }
 
-export function Message({ message, currentStreamName, onDrop }: MessageProps) {
+export function Message({ message, currentStreamName }: MessageProps) {
   const [isDraggedOver, setIsDraggedOver] = useState(false);
   const removeStreamFromMessage = useMutation(
     api.notes.removeStreamFromMessage,
   );
+  const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -76,16 +73,26 @@ export function Message({ message, currentStreamName, onDrop }: MessageProps) {
     }
   };
 
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggedOver(false);
+
+    if (isValidStreamDrop(e)) {
+      const streamName = e.dataTransfer.getData("text/plain");
+      await addStreamToMessage({
+        messageId: message._id,
+        streamName,
+      });
+    }
+  };
+
   return (
     <div
       className={`message ${isDraggedOver ? "drag-over" : ""}`}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
-      onDrop={(e) => {
-        setIsDraggedOver(false);
-        onDrop(e, message._id);
-      }}
+      onDrop={handleDrop}
     >
       <div className="markdown-content">
         <ReactMarkdown
