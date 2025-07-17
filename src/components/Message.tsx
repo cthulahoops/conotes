@@ -1,9 +1,9 @@
-import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Id } from "../../convex/_generated/dataModel";
 import { ImageAttachment } from "./ImageAttachment";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useDragState } from "../hooks/useDragState";
 
 import "./markdown.css";
 
@@ -22,11 +22,14 @@ interface MessageProps {
 }
 
 export function Message({ message, currentStreamName }: MessageProps) {
-  const [isDraggedOver, setIsDraggedOver] = useState(false);
   const removeStreamFromMessage = useMutation(
     api.notes.removeStreamFromMessage,
   );
   const addStreamToMessage = useMutation(api.notes.addStreamToMessage);
+  const { hoveredMessages, setMessageHovered, unsetMessageHovered } =
+    useDragState();
+
+  const isDraggedOver = hoveredMessages.has(message._id);
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -61,7 +64,7 @@ export function Message({ message, currentStreamName }: MessageProps) {
     e.preventDefault();
 
     if (isValidStreamDrop(e)) {
-      setIsDraggedOver(true);
+      setMessageHovered(message._id);
     }
   };
 
@@ -69,13 +72,13 @@ export function Message({ message, currentStreamName }: MessageProps) {
     e.preventDefault();
 
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setIsDraggedOver(false);
+      unsetMessageHovered(message._id);
     }
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDraggedOver(false);
+    unsetMessageHovered(message._id);
 
     if (isValidStreamDrop(e)) {
       const streamName = e.dataTransfer.getData("text/plain");

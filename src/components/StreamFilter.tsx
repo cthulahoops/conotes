@@ -2,12 +2,14 @@ interface StreamFilterProps {
   selectedStream: string | undefined;
   allStreams: string[] | undefined;
   onStreamSelect: (stream: string | undefined) => void;
+  onDragEnd?: () => void;
 }
 
 export function StreamFilter({
   selectedStream,
   allStreams,
   onStreamSelect,
+  onDragEnd,
 }: StreamFilterProps) {
   const handleDragStart = (
     e: React.DragEvent<HTMLButtonElement>,
@@ -32,6 +34,7 @@ export function StreamFilter({
           onClick={() => onStreamSelect(stream)}
           draggable
           onDragStart={(e) => handleDragStart(e, stream)}
+          onDragEnd={onDragEnd}
         >
           #{stream}
         </button>

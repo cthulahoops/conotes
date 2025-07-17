@@ -18,6 +18,7 @@ interface MessagesProps {
 
 export function Messages({ messages, currentStreamName }: MessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+
   const scrollToBottom = useCallback(() => {
     if (!scrollRef.current) {
       return;
@@ -31,7 +32,6 @@ export function Messages({ messages, currentStreamName }: MessagesProps) {
   useEffect(() => {
     scrollToBottom();
   }, [currentStreamName, messages, scrollToBottom]);
-
 
   return (
     <div className="messages-container" ref={scrollRef}>
