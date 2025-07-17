@@ -115,6 +115,37 @@ export const addStreamToMessage = mutation({
   },
 });
 
+export const removeStreamFromMessage = mutation({
+  args: {
+    messageId: v.id("messages"),
+    streamName: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("User must be authenticated");
+    }
+
+    const message = await ctx.db.get(args.messageId);
+    if (!message) {
+      throw new Error("Message not found");
+    }
+
+    // Check if the message belongs to the authenticated user
+    if (message.userId !== userId) {
+      throw new Error("You can only modify your own messages");
+    }
+
+    const currentStreams = message.streams || [];
+
+    // Remove the stream if it exists
+    if (currentStreams.includes(args.streamName)) {
+      const updatedStreams = currentStreams.filter(stream => stream !== args.streamName);
+      await ctx.db.patch(args.messageId, { streams: updatedStreams });
+    }
+  },
+});
+
 export const generateUploadUrl = mutation({
   args: {},
   handler: async (ctx) => {

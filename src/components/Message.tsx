@@ -2,6 +2,8 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Id } from "../../convex/_generated/dataModel";
 import { ImageAttachment } from "./ImageAttachment";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 import "./markdown.css";
 
@@ -23,12 +25,11 @@ interface MessageProps {
   ) => void;
 }
 
-export function Message({
-  message,
-  currentStreamName,
-  onDrop,
-}: MessageProps) {
+export function Message({ message, currentStreamName, onDrop }: MessageProps) {
   const [isDraggedOver, setIsDraggedOver] = useState(false);
+  const removeStreamFromMessage = useMutation(
+    api.notes.removeStreamFromMessage,
+  );
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -96,6 +97,19 @@ export function Message({
             .map((stream) => (
               <span key={stream} className="stream-tag">
                 #{stream}
+                <button
+                  className="stream-tag-remove"
+                  onClick={() =>
+                    removeStreamFromMessage({
+                      messageId: message._id,
+                      streamName: stream,
+                    })
+                  }
+                  aria-label={`Remove ${stream} stream`}
+                  title={`Remove ${stream} stream`}
+                >
+                  ×
+                </button>
               </span>
             ))}
         </div>
@@ -106,4 +120,3 @@ export function Message({
     </div>
   );
 }
-
