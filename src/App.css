@@ -13,11 +13,11 @@
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    height: 100vh;
+  height: 100vh;
 }
 
 #root {
@@ -47,6 +47,13 @@ input, textarea {
   font-family: inherit;
   resize: vertical;
   min-height: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+textarea.drag-over {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.1);
+  border-width: 2px;
 }
 
 button {
