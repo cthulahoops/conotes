@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
-import { ImageUploader } from "./ImageUploader";
 
 interface MessageInputProps {
   selectedStream: string | undefined;
@@ -152,11 +151,6 @@ export function MessageInput({ selectedStream }: MessageInputProps) {
             </button>
           </div>
         )}
-        <ImageUploader
-          onUpload={(storageId) => {
-            setAttachments([...attachments, storageId]);
-          }}
-        />
       </div>
     </form>
   );

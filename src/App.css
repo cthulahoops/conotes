@@ -202,36 +202,6 @@ strong {
   gap: 0.5rem;
 }
 
-.upload-area {
-  flex: 1;
-  border: 2px dashed var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--surface);
-}
-
-.upload-area:hover,
-.upload-area.drag-over {
-  border-color: var(--accent);
-  background: rgba(59, 130, 246, 0.05);
-}
-
-.upload-prompt {
-  color: var(--text);
-  font-size: 0.875rem;
-}
-
-.upload-progress {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: center;
-  color: var(--accent);
-  font-size: 0.875rem;
-}
 
 .spinner {
   width: 16px;
