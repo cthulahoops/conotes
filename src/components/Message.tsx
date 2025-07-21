@@ -4,6 +4,7 @@ import { ImageAttachment } from "./ImageAttachment";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useDragState } from "../hooks/useDragState";
+import { linkifyText } from "../utils/urlUtils";
 
 import "./markdown.css";
 
@@ -112,7 +113,7 @@ export function Message({ message, currentStreamName }: MessageProps) {
             ),
           }}
         >
-          {message.body}
+          {linkifyText(message.body)}
         </ReactMarkdown>
       </div>
       {message.attachments.length > 0 && (
