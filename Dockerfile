@@ -8,4 +8,4 @@ RUN npm ci
 
 COPY . .
 
-RUN --mount=type=secret,id=CONVEX_DEPLOY_KEY npx convex deploy --cmd 'npm run build'
+RUN --mount=type=secret,id=.env env $(cat /run/secrets/.env | xargs) npx convex deploy --cmd 'npm run start'
