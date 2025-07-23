@@ -147,7 +147,22 @@ export function Message({ message, currentStreamName }: MessageProps) {
             ))}
         </div>
       </div>
-      <div className="message-timestamp">
+      <div className="message-actions-timestamp">
+        {currentStreamName && message.streams.includes(currentStreamName) && (
+          <button
+            className="remove-from-current-stream"
+            onClick={() =>
+              removeStreamFromMessage({
+                messageId: message._id,
+                streamName: currentStreamName,
+              })
+            }
+            aria-label={`Remove from ${currentStreamName} stream`}
+            title={`Remove from ${currentStreamName} stream`}
+          >
+            ×
+          </button>
+        )}
         {formatTimestamp(message._creationTime)}
       </div>
     </div>

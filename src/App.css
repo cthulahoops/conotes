@@ -125,10 +125,32 @@ strong {
   opacity: 1;
 }
 
-.message-timestamp {
+.message-actions-timestamp {
   font-size: 0.75rem;
   color: #888;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remove-from-current-stream {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.remove-from-current-stream:hover {
+  opacity: 1;
+  color: #ff4444;
 }
 
 .stream-filter {
@@ -182,7 +204,7 @@ strong {
   gap: 0.25rem;
 }
 
-.message-timestamp {
+.message-actions-timestamp {
   grid-area: timestamp;
 }
 
