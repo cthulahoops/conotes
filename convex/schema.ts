@@ -10,6 +10,11 @@ const schema = defineSchema({
     streams: v.array(v.string()),
     attachments: v.array(v.id("_storage")),
   }),
+  allowlist: defineTable({
+    email: v.string(),
+    addedBy: v.optional(v.id("users")),
+    addedAt: v.number(),
+  }).index("by_email", ["email"]),
 });
 
 export default schema;
