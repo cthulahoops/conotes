@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <g transform="rotate(45 16 16)">
+    <!-- Pencil body -->
+    <rect x="12" y="2" width="8" height="24" fill="#8B5CF6" stroke="#7C3AED" stroke-width="0.5"/>
+    
+    <!-- Pencil tip -->
+    <polygon points="12,26 16,30 20,26" fill="#4B5563"/>
+    
+    <!-- Metal ferrule -->
+    <rect x="12" y="0" width="8" height="2" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="0.5"/>
+    
+    <!-- Eraser -->
+    <rect x="13" y="-2" width="6" height="2" rx="1" fill="#F87171"/>
+    
+    <!-- Wood showing at tip -->
+    <rect x="13" y="24" width="6" height="2" fill="#F59E0B"/>
+    
+    <!-- Highlight on pencil body -->
+    <rect x="13" y="2" width="1" height="22" fill="#A78BFA" opacity="0.7"/>
+  </g>
+</svg>
