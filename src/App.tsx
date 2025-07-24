@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "./App.css";
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 
@@ -51,6 +51,40 @@ function Content() {
     setHoveredMessages(new Set());
   }, []);
 
+  // Handle hash fragment navigation for hashtags
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith("#") && hash.length > 1) {
+        const streamName = hash.slice(1);
+        setSelectedStream(streamName);
+      } else if (hash === "") {
+        setSelectedStream(undefined);
+      }
+    };
+
+    // Handle initial hash on page load
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
+  // Wrapper function to sync stream selection with URL hash
+  const handleStreamSelect = useCallback((stream: string | undefined) => {
+    setSelectedStream(stream);
+    // Update URL hash to match selection
+    if (stream) {
+      window.location.hash = `#${stream}`;
+    } else {
+      window.location.hash = "";
+    }
+  }, []);
+
   const dragContext: DragContextType = {
     hoveredMessages,
     setMessageHovered,
@@ -63,7 +97,7 @@ function Content() {
       <StreamFilter
         selectedStream={selectedStream}
         allStreams={allStreams}
-        onStreamSelect={setSelectedStream}
+        onStreamSelect={handleStreamSelect}
         onDragEnd={clearAllHovered}
       />
       <Messages messages={messages} currentStreamName={selectedStream} />

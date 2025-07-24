@@ -101,16 +101,27 @@ export function Message({ message, currentStreamName }: MessageProps) {
       <div className="markdown-content">
         <ReactMarkdown
           components={{
-            a: ({ href, children, ...props }) => (
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                {...props}
-              >
-                {children}
-              </a>
-            ),
+            a: ({ href, children, ...props }) => {
+              // Handle hashtag links differently from regular URLs
+              if (href?.startsWith("#")) {
+                return (
+                  <a href={href} className="hashtag-link" {...props}>
+                    {children}
+                  </a>
+                );
+              }
+
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  {...props}
+                >
+                  {children}
+                </a>
+              );
+            },
           }}
         >
           {linkifyText(message.body)}
